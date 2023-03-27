@@ -10,4 +10,6 @@ public interface IAuthorService {
     public abstract Collection<Author> getAuthors();
     public abstract Author getAuthor(int id);
     public abstract void addAuthor(Author author);
+    public abstract void deleteAuthor(int id);
+    public abstract void updateAuthor(int id, Author updatedAuthor);
 }

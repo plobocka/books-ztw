@@ -28,4 +28,19 @@ public class AuthorService implements IAuthorService {
     public void addAuthor(Author author) {
         repo.authorsRepo.add(author);
     }
+
+    @Override
+    public void deleteAuthor(int id) {
+        repo.authorsRepo.removeIf(a -> a.getId() == id);
+    }
+
+    @Override
+    public void updateAuthor(int id, Author updatedAuthor) {
+        Author author = repo.authorsRepo.stream()
+                .filter(a -> a.getId() == id)
+                .findAny()
+                .orElse(null);
+        author.setFirstName(updatedAuthor.getFirstName());
+        author.setLatsName(updatedAuthor.getLatsName());
+    }
 }
