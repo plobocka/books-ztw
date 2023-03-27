@@ -1,15 +1,17 @@
-package pl.edu.pwr.ztw.books.model;
+package pl.edu.pwr.ztw.model;
+
+import java.util.List;
 
 public class Book {
     private int id;
     private String title;
-    private Author author;
+    private List<Author> authors;
     int pages;
 
-    public Book(int id, String title, Author author, int pages) {
+    public Book(int id, String title, List<Author> authors, int pages) {
         this.id = id;
         this.title = title;
-        this.author = author;
+        this.authors = authors;
         this.pages = pages;
     }
 
@@ -29,12 +31,12 @@ public class Book {
         this.title = title;
     }
 
-    public Author getAuthor() {
-        return author;
+    public List<Author> getAuthors() {
+        return authors;
     }
 
-    public void setAuthor(Author author) {
-        this.author = author;
+    public void setAuthors(List<Author> authors) {
+        this.authors = authors;
     }
 
     public int getPages() {

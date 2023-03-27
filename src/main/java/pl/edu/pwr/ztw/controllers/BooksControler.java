@@ -1,4 +1,4 @@
-package pl.edu.pwr.ztw.books;
+package pl.edu.pwr.ztw.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,5 +21,11 @@ public class BooksControler {
     @RequestMapping(value = "/get/book/{id}", method = RequestMethod.GET)
     public ResponseEntity<Object> getBook(@PathVariable("id") int id) {
         return new ResponseEntity<>(booksService.getBook(id), HttpStatus.OK);
+    }
+
+    @PostMapping("/post/book")
+    public ResponseEntity<Book> handleRequest(@RequestParam Book book, @RequestParam List<Integer> authors) {
+        booksService.addBook(book, authors);
+        return new ResponseEntity<>(book, HttpStatus.CREATED);
     }
 }

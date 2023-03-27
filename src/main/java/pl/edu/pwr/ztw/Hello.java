@@ -1,4 +1,4 @@
-package pl.edu.pwr.ztw.books;
+package pl.edu.pwr.ztw;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

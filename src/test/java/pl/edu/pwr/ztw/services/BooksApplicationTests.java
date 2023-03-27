@@ -1,4 +1,4 @@
-package pl.edu.pwr.ztw.books;
+package pl.edu.pwr.ztw.services;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
