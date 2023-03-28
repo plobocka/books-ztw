@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.edu.pwr.ztw.exceptions.AuthorNotFoundException;
+import pl.edu.pwr.ztw.exceptions.BookNotFoundException;
 import pl.edu.pwr.ztw.model.Author;
 import pl.edu.pwr.ztw.services.IBooksService;
 import pl.edu.pwr.ztw.model.Book;
@@ -17,7 +19,12 @@ public class BooksControler {
 
     @RequestMapping(value = "/books", method = RequestMethod.GET)
     public ResponseEntity<Object> getBooks() {
-        return new ResponseEntity<>(booksService.getBooks(), HttpStatus.OK);
+        try {
+            return new ResponseEntity<>(booksService.getBooks(), HttpStatus.OK);
+        }
+        catch(BookNotFoundException exception){
+            return new ResponseEntity("Book not found", HttpStatus.NOT_FOUND);
+        }
     }
 
     @RequestMapping(value = "/book/{id}", method = RequestMethod.GET)
@@ -27,27 +34,45 @@ public class BooksControler {
 
     @PostMapping("/book")
     public ResponseEntity<Book> handlePostRequest(@RequestBody RequestBook book) {
-        Book responseBook = booksService.addBook(
-                new Book(book.id, book.title, null, book.pages),
-                book.authors
-        );
-        return new ResponseEntity(responseBook, HttpStatus.CREATED);
+        try {
+            Book responseBook = booksService.addBook(
+                    new Book(book.id, book.title, null, book.pages),
+                    book.authors
+            );
+            return new ResponseEntity(responseBook, HttpStatus.CREATED);
+        }
+        catch (AuthorNotFoundException exception){
+            return new ResponseEntity("Author not found", HttpStatus.NOT_FOUND);
+        }
     }
 
     @PutMapping("/book/{id}")
     public ResponseEntity<Book> handlePutRequest(@RequestBody RequestBook book) {
-        Book responseBook = booksService.updateBook(
-                book.id,
-                new Book(book.id, book.title, null, book.pages),
-                book.authors
-        );
-        return new ResponseEntity(responseBook, HttpStatus.CREATED);
+        try {
+            Book responseBook = booksService.updateBook(
+                    book.id,
+                    new Book(book.id, book.title, null, book.pages),
+                    book.authors
+            );
+            return new ResponseEntity(responseBook, HttpStatus.CREATED);
+        }
+        catch (AuthorNotFoundException exception){
+            return new ResponseEntity("Author not found", HttpStatus.NOT_FOUND);
+        }
+        catch(BookNotFoundException exception){
+            return new ResponseEntity("Book not found", HttpStatus.NOT_FOUND);
+        }
     }
 
     @RequestMapping(value = "/book/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<Object> deleteBook(@PathVariable("id") int id) {
-        booksService.deleteBook(id);
-        return new ResponseEntity<>(booksService.getBook(id), HttpStatus.OK);
+        try {
+            booksService.deleteBook(id);
+            return new ResponseEntity<>(booksService.getBook(id), HttpStatus.OK);
+        }
+        catch(BookNotFoundException exception){
+            return new ResponseEntity("Book not found", HttpStatus.NOT_FOUND);
+        }
     }
 
     private static class RequestBook{
