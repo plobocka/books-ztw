@@ -1,6 +1,7 @@
 package pl.edu.pwr.ztw.services;
 
 import org.springframework.stereotype.Service;
+import pl.edu.pwr.ztw.exceptions.AuthorNotFoundException;
 import pl.edu.pwr.ztw.model.Author;
 import pl.edu.pwr.ztw.model.Book;
 import pl.edu.pwr.ztw.repo.Repository;
@@ -20,11 +21,11 @@ public class AuthorService implements IAuthorService {
     }
 
     @Override
-    public Author getAuthor(int id) {
+    public Author getAuthor(int id) throws AuthorNotFoundException{
         return repo.authorsRepo.stream()
                 .filter(a -> a.getId() == id)
                 .findAny()
-                .orElse(null);
+                .orElseThrow(() -> new AuthorNotFoundException("Author with id " + id + " not found"));
     }
 
     @Override
@@ -51,16 +52,15 @@ public class AuthorService implements IAuthorService {
                 searchID = -1;
             }
         }
-
         repo.authorsRepo.removeIf(a -> a.getId() == id);
     }
 
     @Override
-    public Author updateAuthor(int id, Author updatedAuthor) {
+    public Author updateAuthor(int id, Author updatedAuthor) throws AuthorNotFoundException{
         Author author = repo.authorsRepo.stream()
                 .filter(a -> a.getId() == id)
                 .findAny()
-                .orElse(null);
+                .orElseThrow(() -> new AuthorNotFoundException("Author with id " + id + " not found"));
         author.setFirstName(updatedAuthor.getFirstName());
         author.setLatsName(updatedAuthor.getLatsName());
         return author;

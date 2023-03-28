@@ -21,7 +21,12 @@ public class AuthorsController {
 
     @RequestMapping(value = "/author/{id}", method = RequestMethod.GET)
     public ResponseEntity<Object> getAuthor(@PathVariable("id") int id) {
-        return new ResponseEntity<>(authorService.getAuthor(id), HttpStatus.OK);
+        try{
+            return new ResponseEntity<>(authorService.getAuthor(id), HttpStatus.OK);
+        }
+        catch(Exception e) {
+            return new ResponseEntity("Author not found", HttpStatus.NOT_FOUND);
+        }
     }
 
     @PostMapping("/author")
@@ -32,8 +37,14 @@ public class AuthorsController {
 
     @PutMapping("/author")
     public ResponseEntity<Author> handlePutAuthorRequest(@RequestBody Author author) {
-        Author responseAuthor = authorService.updateAuthor(author.getId(), author);
-        return new ResponseEntity(responseAuthor, HttpStatus.CREATED);
+        try {
+            Author responseAuthor = authorService.updateAuthor(author.getId(), author);
+            return new ResponseEntity(responseAuthor, HttpStatus.CREATED);
+        }
+        catch(Exception e){
+            return new ResponseEntity("Author not found", HttpStatus.NOT_FOUND);
+        }
+
     }
 
     @RequestMapping(value = "/author/{id}", method = RequestMethod.DELETE)
