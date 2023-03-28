@@ -22,32 +22,24 @@ public class BooksService implements IBooksService {
 
     @Override
     public Book getBook(int id) throws BookNotFoundException {
-        try {
-            return repo.booksRepo.stream()
-                    .filter(b -> b.getId() == id)
-                    .findAny()
-                    .orElseThrow(() -> new BookNotFoundException("Book with id " + id + " not found"));
-        } catch (BookNotFoundException e) {
-            return null;
-        }
+        return repo.booksRepo.stream()
+                .filter(b -> b.getId() == id)
+                .findAny()
+                .orElseThrow(() -> new BookNotFoundException("Book with id " + id + " not found"));
     }
 
     @Override
     public Book addBook(Book book, List<Integer> authorsIDs) throws AuthorNotFoundException {
-        try {
-            List<Author> authors = new ArrayList<>();
-            for (int id : authorsIDs) {
-                authors.add(repo.authorsRepo.stream()
-                        .filter(a -> a.getId() == id)
-                        .findAny()
-                        .orElseThrow(() -> new AuthorNotFoundException("Author with id " + id + " not found")));
-            }
-            book.setAuthors(authors);
-            repo.booksRepo.add(book);
-            return book;
-        } catch (AuthorNotFoundException e) {
-            return null;
+        List<Author> authors = new ArrayList<>();
+        for (int id : authorsIDs) {
+            authors.add(repo.authorsRepo.stream()
+                    .filter(a -> a.getId() == id)
+                    .findAny()
+                    .orElseThrow(() -> new AuthorNotFoundException("Author with id " + id + " not found")));
         }
+        book.setAuthors(authors);
+        repo.booksRepo.add(book);
+        return book;
     }
 
     @Override
@@ -70,7 +62,7 @@ public class BooksService implements IBooksService {
 
     @Override
     public Book updateBook(int id, Book updatedBook, List<Integer> authorsIDs) throws BookNotFoundException, AuthorNotFoundException {
-        try {
+
             Book bookToUpdate = repo.booksRepo.stream()
                     .filter(b -> b.getId() == id)
                     .findAny()
@@ -90,9 +82,6 @@ public class BooksService implements IBooksService {
                 }
             }
             return bookToUpdate;
-        } catch (BookNotFoundException | AuthorNotFoundException e) {
-            return null;
-        }
     }
 
     @Override
