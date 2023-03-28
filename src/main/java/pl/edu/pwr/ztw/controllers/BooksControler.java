@@ -26,12 +26,28 @@ public class BooksControler {
     }
 
     @PostMapping("/book")
-    public ResponseEntity<Book> handleRequest(@RequestBody RequestBook book) {
+    public ResponseEntity<Book> handlePostRequest(@RequestBody RequestBook book) {
         Book responseBook = booksService.addBook(
                 new Book(book.id, book.title, null, book.pages),
                 book.authors
         );
         return new ResponseEntity(responseBook, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/book/{id}")
+    public ResponseEntity<Book> handlePutRequest(@RequestBody RequestBook book) {
+        Book responseBook = booksService.updateBook(
+                book.id,
+                new Book(book.id, book.title, null, book.pages),
+                book.authors
+        );
+        return new ResponseEntity(responseBook, HttpStatus.CREATED);
+    }
+
+    @RequestMapping(value = "/book/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity<Object> deleteBook(@PathVariable("id") int id) {
+        booksService.deleteBook(id);
+        return new ResponseEntity<>(booksService.getBook(id), HttpStatus.OK);
     }
 
     private static class RequestBook{

@@ -75,7 +75,7 @@ public class BooksService implements IBooksService {
                 bookToUpdate.setAuthors(authors);
             }
         }
-        return null;
+        return bookToUpdate;
     }
 
     @Override
