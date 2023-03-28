@@ -36,7 +36,7 @@ public class AuthorService implements IAuthorService {
     @Override
     public void deleteAuthor(int id) {
         List<Book> books= repo.booksRepo;
-        int searchID = 0;
+        int searchID = -1;
         for (Book book : books) {
             for (int i=0; i < book.getAuthors().size(); i++){
                 if (book.getAuthors().get(i).getId() == id){
@@ -44,9 +44,12 @@ public class AuthorService implements IAuthorService {
                 }
 
             }
-            List<Author> as = new ArrayList<>(book.getAuthors());
-            as.remove(searchID);
-            book.setAuthors(as);
+            if (searchID != -1) {
+                List<Author> as = new ArrayList<>(book.getAuthors());
+                as.remove(searchID);
+                book.setAuthors(as);
+                searchID = -1;
+            }
         }
 
         repo.authorsRepo.removeIf(a -> a.getId() == id);
