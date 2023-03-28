@@ -46,8 +46,4 @@ public class Book {
     public void setPages(int pages) {
         this.pages = pages;
     }
-
-    public void removeAuthor(Author author){
-        authors.remove(author);
-    }
 }
