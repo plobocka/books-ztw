@@ -27,7 +27,7 @@ public class BooksService implements IBooksService {
     }
 
     @Override
-    public void addBook(Book book, List<Integer> authorsIDs) {
+    public Book addBook(Book book, List<Integer> authorsIDs) {
         List<Author> authors = new ArrayList<>();
         for (int id : authorsIDs) {
             authors.add(repo.authorsRepo.stream()
@@ -37,6 +37,7 @@ public class BooksService implements IBooksService {
         }
         book.setAuthors(authors);
         repo.booksRepo.add(book);
+        return book;
     }
 
     @Override
@@ -55,7 +56,7 @@ public class BooksService implements IBooksService {
     }
 
     @Override
-    public void updateBook(int id, Book updatedBook, List<Integer> authorsIDs) {
+    public Book updateBook(int id, Book updatedBook, List<Integer> authorsIDs) {
         Book bookToUpdate = repo.booksRepo.stream()
                 .filter(b -> b.getId() == id)
                 .findAny()
@@ -74,6 +75,7 @@ public class BooksService implements IBooksService {
                 bookToUpdate.setAuthors(authors);
             }
         }
+        return null;
     }
 
     @Override
